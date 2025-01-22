@@ -4,6 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
+    paths:
+      [
+        "src/ContosoTraders.Api.Carts/**",
+        "src/ContosoTraders.Api.Core/**",
+        "src/ContosoTraders.Api.Images/**",
+        "src/ContosoTraders.Api.Products/**",
+        "src/ContosoTraders.Ui.Website/**",
+      ]
 
 env:
   # You can specify any location for `SUB_DEPLOYMENT_REGION`. It's the region where the deployment
@@ -272,4 +280,4 @@ jobs:
       - name: purge CDN endpoint
         uses: azure/CLI@v1
         with:
-          inlineScript: az cdn endpoint purge --no-wait --content-paths '/api' -n '${{ env.UI_CDN_ENDPOINT_NAME }}${{ secrets.ENVIRONMENT }}' -g '${{ env.RESOURCE_GROUP_NAME }}${{ secrets.ENVIRONMENT }}' --profile-name '${{ env.CDN_PROFILE_NAME }}${{ secrets. ENVIRONMENT }}'
+          inlineScript: az cdn endpoint purge --no-wait --content-paths '/*' -n '${{ env.UI_CDN_ENDPOINT_NAME }}${{ secrets.ENVIRONMENT }}' -g '${{ env.RESOURCE_GROUP_NAME }}${{ secrets.ENVIRONMENT }}' --profile-name '${{ env.CDN_PROFILE_NAME }}${{ secrets.ENVIRONMENT }}'
