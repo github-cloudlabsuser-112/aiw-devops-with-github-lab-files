@@ -273,13 +273,15 @@ jobs:
       - name: npm run build
         run: npm run build
         working-directory: src/ContosoTraders.Ui.Website
-      - name: Upload UI to Blob Storage
-        uses: actions/storage-blob-upload@v1
+      - name: Deploy UI to Blob Storage
+        uses: azure/CLI@v1
         with:
-          connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-          container-name: '$web'
-          source-folder: './src/ContosoTraders.Ui.Website/build'
-          blob-prefix: '' # Optional: you can set a prefix for your blobs if needed
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name '${{ env.UI_STORAGE_ACCOUNT_NAME }}${{ secrets.ENVIRONMENT }}' \
+              --destination '$web' \
+              --source './src/ContosoTraders.Ui.Website/build' \
+              --connection-string ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
       - name: purge CDN endpoint
         uses: azure/CLI@v1
         with:
