@@ -274,7 +274,7 @@ jobs:
         run: npm run build
         working-directory: src/ContosoTraders.Ui.Website
       - name: Upload UI to Blob Storage
-        uses: azure/storage-blob-upload@v1
+        uses: actions/storage-blob-upload@v1
         with:
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
           container-name: '$web'
