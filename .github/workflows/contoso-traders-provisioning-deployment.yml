@@ -273,13 +273,13 @@ jobs:
       - name: npm run build
         run: npm run build
         working-directory: src/ContosoTraders.Ui.Website
-      - name: Install AzCopy
-        run: |
-          curl -sL https://aka.ms/downloadazcopy-v10-linux | sudo bash
-      - name: deploy to storage
-        uses: azure/CLI@v1
+      - name: Upload UI to Blob Storage
+        uses: azure/storage-blob-upload@v1
         with:
-          inlineScript: az storage blob sync --account-name '${{ env.UI_STORAGE_ACCOUNT_NAME }}${{ secrets.ENVIRONMENT }}' -c '$web' -s 'src/ContosoTraders.Ui.Website/build'
+          connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          container-name: '$web'
+          source-folder: './src/ContosoTraders.Ui.Website/build'
+          blob-prefix: '' # Optional: you can set a prefix for your blobs if needed
       - name: purge CDN endpoint
         uses: azure/CLI@v1
         with:
