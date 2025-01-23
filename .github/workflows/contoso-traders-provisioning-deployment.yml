@@ -273,6 +273,19 @@ jobs:
       - name: npm run build
         run: npm run build
         working-directory: src/ContosoTraders.Ui.Website
+      - name: Install AzCopy with retry
+        run: |
+        retry_count=0
+        max_retries=5
+        until curl -sL https://aka.ms/downloadazcopy-v10-linux | sudo bash; do
+        retry_count=$((retry_count + 1))
+        if [ $retry_count -ge $max_retries ]; then
+        echo "Failed to install AzCopy after $max_retries attempts."
+        exit 1
+        fi
+        echo "Retrying... ($retry_count)"
+        sleep 10
+        done
       - name: deploy to storage
         uses: azure/CLI@v1
         with:
